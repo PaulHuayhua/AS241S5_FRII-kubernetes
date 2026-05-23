@@ -1,0 +1,60 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paulhuayhua-api-deployment
+  namespace: paulhuayhua-api-ns
+  labels:
+    app: paulhuayhua-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: paulhuayhua-api
+
+  template:
+    metadata:
+      labels:
+        app: paulhuayhua-api
+
+    spec:
+      containers:
+        - name: paulhuayhua-api
+          image: paulhuayhua/persona:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8085
+
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_ENV
+                  name: paulhuayhua-api-config
+
+            - name: APP_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_VERSION
+                  name: paulhuayhua-api-config
+
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: paulhuayhua-api-config
+                  key: APP_PORT
+
+            - name: SECRET_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: paulhuayhua-api-secret
+
+            - name: SECRET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: paulhuayhua-api-secret

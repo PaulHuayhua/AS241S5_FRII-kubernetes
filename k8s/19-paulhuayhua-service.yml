@@ -1,0 +1,28 @@
+# SERVICE
+# Service lo que hace es exponer los pods a la red, ya que estos tienen distintas IP,
+# o ips efimeras, es decir que cambian cada vez que se crean
+
+# TIPOS DE SERVICE:
+# ClusterIP: solo es accesible dentro del cluster
+# NodePort: expone un puerto en cada nodo del cluster
+# LoadBalancer: crea un balanceador de carga externo para distribuir el tráfico entre los pods
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: paulhuayhua-api-service
+  namespace: paulhuayhua-api-ns
+  labels:
+    app: paulhuayhua-api
+
+spec:
+  selector:
+    app: paulhuayhua-api
+
+  type: NodePort
+
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 8085
+      nodePort: 30085
